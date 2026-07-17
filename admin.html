@@ -1,0 +1,345 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家后台 - 美味餐厅管理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-page">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="admin-logo">
+                <i class="fas fa-utensils"></i>
+                <span>美味餐厅</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>今日概览</span>
+            </a>
+            <a href="#" class="nav-item" data-page="orders">
+                <i class="fas fa-receipt"></i>
+                <span>订单管理</span>
+            </a>
+            <a href="#" class="nav-item" data-page="menu">
+                <i class="fas fa-book-open"></i>
+                <span>菜品管理</span>
+            </a>
+            <a href="#" class="nav-item" data-page="revenue">
+                <i class="fas fa-chart-line"></i>
+                <span>营收统计</span>
+            </a>
+            <a href="#" class="nav-item" data-page="tables">
+                <i class="fas fa-chair"></i>
+                <span>桌台管理</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>前台点餐</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content" id="mainContent">
+        <!-- 顶部栏 -->
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">今日概览</h1>
+            </div>
+            <div class="header-right">
+                <div class="header-time">
+                    <i class="fas fa-clock"></i>
+                    <span id="currentTime"></span>
+                </div>
+                <div class="header-user">
+                    <i class="fas fa-user-circle"></i>
+                    <span>管理员</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 今日概览页面 -->
+        <div class="page-content" id="dashboardPage">
+            <!-- 统计卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card today-revenue">
+                    <div class="stat-icon">
+                        <i class="fas fa-yen-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>今日营收</h3>
+                        <p class="stat-value">¥<span id="todayRevenue">0.00</span></p>
+                        <span class="stat-change positive" id="revenueChange">
+                            <i class="fas fa-arrow-up"></i> +12.5%
+                        </span>
+                    </div>
+                </div>
+                <div class="stat-card today-orders">
+                    <div class="stat-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>今日订单</h3>
+                        <p class="stat-value"><span id="todayOrders">0</span>单</p>
+                        <span class="stat-change positive" id="ordersChange">
+                            <i class="fas fa-arrow-up"></i> +8.3%
+                        </span>
+                    </div>
+                </div>
+                <div class="stat-card avg-price">
+                    <div class="stat-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>客单价</h3>
+                        <p class="stat-value">¥<span id="avgPrice">0.00</span></p>
+                        <span class="stat-change neutral">
+                            <i class="fas fa-minus"></i> 持平
+                        </span>
+                    </div>
+                </div>
+                <div class="stat-card serving">
+                    <div class="stat-icon">
+                        <i class="fas fa-concierge-bell"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>待出餐</h3>
+                        <p class="stat-value"><span id="pendingOrders">0</span>单</p>
+                        <span class="stat-change warning">
+                            <i class="fas fa-exclamation-circle"></i> 需处理
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 图表区域 -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>今日营收趋势</h3>
+                        <select id="chartPeriod">
+                            <option value="today">今日</option>
+                            <option value="week">本周</option>
+                            <option value="month">本月</option>
+                        </select>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>热销菜品TOP5</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="topDishesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最近订单 -->
+            <div class="recent-orders-card">
+                <div class="card-header">
+                    <h3>最近订单</h3>
+                    <a href="#" class="view-all" data-page="orders">查看全部</a>
+                </div>
+                <div class="orders-table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>桌号</th>
+                                <th>菜品</th>
+                                <th>金额</th>
+                                <th>状态</th>
+                                <th>时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentOrdersBody">
+                            <!-- 最近订单 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 订单管理页面 -->
+        <div class="page-content" id="ordersPage" style="display: none;">
+            <div class="page-actions">
+                <div class="filter-group">
+                    <select id="orderStatusFilter">
+                        <option value="all">全部状态</option>
+                        <option value="pending">待确认</option>
+                        <option value="preparing">制作中</option>
+                        <option value="ready">待出餐</option>
+                        <option value="completed">已完成</option>
+                    </select>
+                    <input type="date" id="orderDateFilter">
+                    <button class="filter-btn" id="filterOrdersBtn">
+                        <i class="fas fa-filter"></i> 筛选
+                    </button>
+                </div>
+                <button class="refresh-btn" id="refreshOrders">
+                    <i class="fas fa-sync-alt"></i> 刷新
+                </button>
+            </div>
+            <div class="orders-list" id="ordersList">
+                <!-- 订单列表 -->
+            </div>
+        </div>
+
+        <!-- 菜品管理页面 -->
+        <div class="page-content" id="menuPage" style="display: none;">
+            <div class="page-actions">
+                <button class="add-dish-btn" id="addDishBtn">
+                    <i class="fas fa-plus"></i> 添加菜品
+                </button>
+            </div>
+            <div class="menu-management" id="menuManagement">
+                <!-- 菜品管理列表 -->
+            </div>
+        </div>
+
+        <!-- 营收统计页面 -->
+        <div class="page-content" id="revenuePage" style="display: none;">
+            <div class="revenue-summary">
+                <div class="summary-card">
+                    <h4>今日营收</h4>
+                    <p class="summary-value">¥<span id="revenueToday">0.00</span></p>
+                </div>
+                <div class="summary-card">
+                    <h4>本周营收</h4>
+                    <p class="summary-value">¥<span id="revenueWeek">0.00</span></p>
+                </div>
+                <div class="summary-card">
+                    <h4>本月营收</h4>
+                    <p class="summary-value">¥<span id="revenueMonth">0.00</span></p>
+                </div>
+            </div>
+            <div class="chart-card full-width">
+                <div class="chart-header">
+                    <h3>营收趋势分析</h3>
+                    <select id="revenueChartPeriod">
+                        <option value="week">最近7天</option>
+                        <option value="month">最近30天</option>
+                    </select>
+                </div>
+                <div class="chart-body large-chart">
+                    <canvas id="revenueTrendChart"></canvas>
+                </div>
+            </div>
+            <div class="revenue-details">
+                <h3>营收明细</h3>
+                <table class="revenue-table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>订单数</th>
+                            <th>营收</th>
+                            <th>环比</th>
+                        </tr>
+                    </thead>
+                    <tbody id="revenueDetailsBody">
+                        <!-- 营收明细 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 桌台管理页面 -->
+        <div class="page-content" id="tablesPage" style="display: none;">
+            <div class="tables-grid" id="tablesGrid">
+                <!-- 桌台管理 -->
+            </div>
+        </div>
+    </main>
+
+    <!-- 菜品编辑弹窗 -->
+    <div class="modal-overlay" id="dishModal">
+        <div class="modal-content dish-modal">
+            <div class="modal-header">
+                <h3 id="dishModalTitle">添加菜品</h3>
+                <button class="modal-close" id="dishModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="dishForm">
+                    <div class="form-group">
+                        <label>菜品名称</label>
+                        <input type="text" id="dishName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>分类</label>
+                        <select id="dishCategory">
+                            <option value="staple">主食</option>
+                            <option value="meat">荤菜</option>
+                            <option value="vegetable">素菜</option>
+                            <option value="soup">汤品</option>
+                            <option value="drink">饮品</option>
+                            <option value="dessert">甜点</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>价格 (元)</label>
+                        <input type="number" id="dishPrice" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>描述</label>
+                        <textarea id="dishDesc" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="dishHot"> 热销推荐
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" id="dishFormCancel">取消</button>
+                        <button type="submit" class="submit-btn">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 订单详情弹窗 -->
+    <div class="modal-overlay" id="orderDetailModal">
+        <div class="modal-content order-detail-modal">
+            <div class="modal-header">
+                <h3>订单详情</h3>
+                <button class="modal-close" id="orderDetailClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="orderDetailContent">
+                <!-- 订单详情内容 -->
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="orderDetailCancel">关闭</button>
+                <button class="modal-confirm-btn" id="printOrderBtn">
+                    <i class="fas fa-print"></i> 打印小票
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

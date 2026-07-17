@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桌台二维码 - 美味餐厅</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .qr-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .qr-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .qr-header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .qr-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+        
+        .qr-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .qr-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .qr-card h3 {
+            font-size: 24px;
+            color: #333;
+            margin: 15px 0 5px;
+        }
+        
+        .qr-card p {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+        
+        .qr-code {
+            display: inline-block;
+            padding: 15px;
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 10px;
+        }
+        
+        .qr-card .print-btn {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        .qr-card .print-btn:hover {
+            background: #ee5a24;
+            transform: scale(1.05);
+        }
+        
+        .instructions {
+            margin-top: 40px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .instructions h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .print-btn, .instructions {
+                display: none;
+            }
+            .qr-card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <div class="qr-header">
+            <h1><i class="fas fa-utensils"></i> 美味餐厅 - 桌台二维码</h1>
+            <p>请将二维码打印后放置在对应餐桌上，顾客扫码即可点餐</p>
+        </div>
+        
+        <div class="qr-grid" id="qrGrid">
+            <!-- 二维码卡片将通过JavaScript生成 -->
+        </div>
+        
+        <div class="instructions">
+            <h2><i class="fas fa-info-circle"></i> 使用说明</h2>
+            <ol>
+                <li>点击"打印"按钮可单独打印某个桌台的二维码</li>
+                <li>建议使用普通A4纸打印，然后裁剪成合适大小</li>
+                <li>将打印好的二维码放入桌牌或用透明胶固定在餐桌上</li>
+                <li>顾客使用微信扫描二维码即可进入点餐页面</li>
+                <li>每个二维码对应固定桌号，方便后厨识别</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // 桌台列表
+        const tables = [
+            'A01', 'A02', 'A03', 'A05', 'A06', 'A08',
+            'B01', 'B02', 'B03', 'B05', 'B06', 'B08'
+        ];
+        
+        // 生成二维码
+        function generateQRCode(table) {
+            const baseUrl = window.location.origin + window.location.pathname.replace('qrcode.html', 'index.html');
+            const url = `${baseUrl}?table=${table}`;
+            
+            const qrGrid = document.getElementById('qrGrid');
+            const card = document.createElement('div');
+            card.className = 'qr-card';
+            
+            const qrDiv = document.createElement('div');
+            qrDiv.className = 'qr-code';
+            qrDiv.id = `qr-${table}`;
+            
+            card.innerHTML = `
+                <div class="qr-code" id="qr-${table}"></div>
+                <h3>${table}</h3>
+                <p>扫码点餐</p>
+                <button class="print-btn" onclick="printQR('${table}')">
+                    <i class="fas fa-print"></i> 打印
+                </button>
+            `;
+            
+            qrGrid.appendChild(card);
+            
+            // 生成QR码
+            QRCode.toCanvas(document.querySelector(`#qr-${table}`), url, {
+                width: 150,
+                margin: 2,
+                color: {
+                    dark: '#333333',
+                    light: '#ffffff'
+                }
+            }, function(error) {
+                if (error) console.error(error);
+            });
+        }
+        
+        // 打印单个二维码
+        function printQR(table) {
+            const printWindow = window.open('', '_blank');
+            const qrCanvas = document.querySelector(`#qr-${table} canvas`);
+            
+            if (qrCanvas) {
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>桌台 ${table} - 二维码</title>
+                        <style>
+                            body {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                min-height: 100vh;
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                padding: 20px;
+                            }
+                            .qr-container {
+                                text-align: center;
+                                border: 2px solid #333;
+                                padding: 20px;
+                                border-radius: 10px;
+                            }
+                            h1 {
+                                font-size: 32px;
+                                margin: 10px 0 5px;
+                            }
+                            p {
+                                font-size: 14px;
+                                color: #666;
+                                margin: 0;
+                            }
+                            canvas {
+                                margin: 15px 0;
+                            }
+                            .footer {
+                                margin-top: 20px;
+                                font-size: 12px;
+                                color: #999;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="qr-container">
+                            <h1>${table}</h1>
+                            <p>美味餐厅 · 扫码点餐</p>
+                            <canvas id="printQR"></canvas>
+                            <p>请使用微信扫描二维码</p>
+                            <div class="footer">美味餐厅 - 让美食触手可及</div>
+                        </div>
+                        <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"><\/script>
+                        <script>
+                            QRCode.toCanvas(document.getElementById('printQR'), '${window.location.origin}${window.location.pathname.replace('qrcode.html', 'index.html')}?table=${table}', {
+                                width: 200,
+                                margin: 2
+                            });
+                            setTimeout(() => window.print(), 500);
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+            }
+        }
+        
+        // 初始化所有二维码
+        document.addEventListener('DOMContentLoaded', function() {
+            tables.forEach(table => generateQRCode(table));
+            
+            // 从URL获取桌号并设置
+            const urlParams = new URLSearchParams(window.location.search);
+            const tableParam = urlParams.get('table');
+            if (tableParam) {
+                document.getElementById('table-number').textContent = tableParam;
+            }
+        });
+    </script>
+</body>
+</html>

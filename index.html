@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美味餐厅 - 扫码点餐</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="customer-page">
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <span>美味餐厅</span>
+            </div>
+            <div class="table-info">
+                <i class="fas fa-qrcode"></i>
+                <span>桌号: <strong id="table-number">A08</strong></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 分类导航 -->
+    <nav class="category-nav">
+        <div class="category-list" id="categoryList">
+            <button class="category-btn active" data-category="all">
+                <i class="fas fa-th-large"></i>
+                <span>全部</span>
+            </button>
+            <button class="category-btn" data-category="hot">
+                <i class="fas fa-fire"></i>
+                <span>热销</span>
+            </button>
+            <button class="category-btn" data-category="staple">
+                <i class="fas fa-bowl-rice"></i>
+                <span>主食</span>
+            </button>
+            <button class="category-btn" data-category="meat">
+                <i class="fas fa-drumstick-bite"></i>
+                <span>荤菜</span>
+            </button>
+            <button class="category-btn" data-category="vegetable">
+                <i class="fas fa-leaf"></i>
+                <span>素菜</span>
+            </button>
+            <button class="category-btn" data-category="soup">
+                <i class="fas fa-mug-hot"></i>
+                <span>汤品</span>
+            </button>
+            <button class="category-btn" data-category="drink">
+                <i class="fas fa-glass-water"></i>
+                <span>饮品</span>
+            </button>
+            <button class="category-btn" data-category="dessert">
+                <i class="fas fa-cake-candles"></i>
+                <span>甜点</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 菜品列表 -->
+    <main class="menu-container">
+        <div class="menu-grid" id="menuGrid">
+            <!-- 菜品卡片将通过JavaScript动态生成 -->
+        </div>
+    </main>
+
+    <!-- 购物车浮窗 -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-panel" id="cartPanel">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> 已选菜品</h3>
+            <button class="cart-close" id="cartClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- 购物车商品 -->
+        </div>
+        <div class="cart-empty" id="cartEmpty">
+            <i class="fas fa-shopping-basket"></i>
+            <p>购物车是空的</p>
+            <small>快去选些美味菜品吧~</small>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>合计：</span>
+                <span class="total-price">¥<span id="totalPrice">0.00</span></span>
+            </div>
+            <button class="submit-order-btn" id="submitOrder" disabled>
+                <i class="fas fa-paper-plane"></i>
+                提交订单
+            </button>
+        </div>
+    </div>
+
+    <!-- 底部购物车栏 -->
+    <div class="bottom-cart-bar" id="bottomCartBar">
+        <div class="cart-icon-wrapper" id="cartIconWrapper">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </div>
+        <div class="cart-summary">
+            <span class="cart-total-price">¥<span id="bottomTotalPrice">0.00</span></span>
+            <span class="cart-hint">点击查看详情</span>
+        </div>
+        <button class="checkout-btn" id="checkoutBtn" disabled>
+            去结算
+        </button>
+    </div>
+
+    <!-- 订单确认弹窗 -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-receipt"></i> 确认订单</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="order-summary" id="orderSummary">
+                    <!-- 订单摘要 -->
+                </div>
+                <div class="order-total-modal">
+                    <span>订单总额：</span>
+                    <span class="modal-total-price">¥<span id="modalTotalPrice">0.00</span></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="modalCancel">返回修改</button>
+                <button class="modal-confirm-btn" id="modalConfirm">
+                    <i class="fab fa-weixin"></i>
+                    微信支付
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支付成功弹窗 -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>下单成功！</h3>
+            <p>您的订单已提交，请稍候</p>
+            <div class="order-number">
+                订单号：<span id="orderNumber"></span>
+            </div>
+            <button class="success-btn" id="successBtn">
+                <i class="fas fa-clipboard-list"></i>
+                查看订单
+            </button>
+        </div>
+    </div>
+
+    <!-- 历史订单页面 -->
+    <div class="page-container" id="historyPage" style="display: none;">
+        <header class="page-header">
+            <button class="back-btn" id="backFromHistory">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2>历史订单</h2>
+            <div></div>
+        </header>
+        <div class="history-orders" id="historyOrders">
+            <!-- 历史订单列表 -->
+        </div>
+        <div class="empty-history" id="emptyHistory" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <p>暂无历史订单</p>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

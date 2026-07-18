@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统设置 - 美味餐厅</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .setup-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .setup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .setup-header i {
+            font-size: 50px;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .setup-header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .setup-header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .setup-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .setup-section h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .setup-section h3 i {
+            color: #ff6b6b;
+        }
+        
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px dashed #ddd;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .step-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .step-number {
+            background: #ff6b6b;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+        
+        .form-group .hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .btn-primary {
+            flex: 1;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,107,107,0.4);
+        }
+        
+        .btn-secondary {
+            padding: 14px 20px;
+            background: #f5f5f5;
+            color: #666;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+        
+        .status-message.loading {
+            background: #e3f2fd;
+            color: #1565c0;
+            display: block;
+        }
+        
+        .link-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .link-card p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .link-card a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 600;
+            word-break: break-all;
+        }
+        
+        .link-card a:hover {
+            text-decoration: underline;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 20px;
+        }
+        
+        .warning-box h4 {
+            color: #e65100;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .warning-box p {
+            font-size: 13px;
+            color: #bf360c;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <div class="setup-header">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <h1>云同步设置</h1>
+            <p>配置 GitHub 实现多设备数据同步</p>
+        </div>
+        
+        <div class="setup-section">
+            <h3><i class="fas fa-key"></i> 第一步：获取 GitHub Token</h3>
+            <ol class="step-list">
+                <li>
+                    <span class="step-number">1</span>
+                    <span>访问 <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a></span>
+                </li>
+                <li>
+                    <span class="step-number">2</span>
+                    <span>点击 <strong>"Generate new token (classic)"</strong></span>
+                </li>
+                <li>
+                    <span class="step-number">3</span>
+                    <span>Note 填写：<strong>restaurant-data</strong></span>
+                </li>
+                <li>
+                    <span class="step-number">4</span>
+                    <span>勾选 <strong>"repo"</strong> 权限（全部 repo 权限）</span>
+                </li>
+                <li>
+                    <span class="step-number">5</span>
+                    <span>点击 <strong>"Generate token"</strong> 并复制生成的 Token</span>
+                </li>
+            </ol>
+        </div>
+        
+        <div class="setup-section">
+            <h3><i class="fas fa-cog"></i> 第二步：配置 Token</h3>
+            <div class="form-group">
+                <label>GitHub Token</label>
+                <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                <p class="hint">Token 只会保存在您的浏览器本地，不会上传到任何地方</p>
+            </div>
+            
+            <div class="form-group">
+                <label>仓库信息（已自动填入）</label>
+                <input type="text" id="repoInfo" value="ttt222-del/-n" disabled>
+                <p class="hint">您的 GitHub 用户名和仓库名</p>
+            </div>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn-primary" id="saveBtn">
+                <i class="fas fa-save"></i> 保存配置
+            </button>
+            <button class="btn-secondary" id="testBtn">
+                <i class="fas fa-vial"></i> 测试连接
+            </button>
+        </div>
+        
+        <div class="status-message" id="statusMessage"></div>
+        
+        <div class="link-card" id="linkCard" style="display: none;">
+            <p>🎉 配置成功！您的链接：</p>
+            <div>
+                <strong>顾客点餐：</strong>
+                <a href="#" id="customerLink"></a>
+                <button class="copy-btn" onclick="copyLink('customerLink')">复制</button>
+            </div>
+            <div style="margin-top: 10px;">
+                <strong>商家后台：</strong>
+                <a href="#" id="adminLink"></a>
+                <button class="copy-btn" onclick="copyLink('adminLink')">复制</button>
+            </div>
+            <div style="margin-top: 10px;">
+                <strong>系统设置：</strong>
+                <a href="#" id="setupLink"></a>
+                <button class="copy-btn" onclick="copyLink('setupLink')">复制</button>
+            </div>
+        </div>
+        
+        <div class="warning-box">
+            <h4><i class="fas fa-exclamation-triangle"></i> 安全提示</h4>
+            <p>GitHub Token 拥有您仓库的读写权限，请勿泄露给他人。如果怀疑 Token 已泄露，请立即在 GitHub 上删除并重新生成。</p>
+        </div>
+    </div>
+    
+    <script src="js/github-storage.js"></script>
+    <script>
+        const tokenInput = document.getElementById('tokenInput');
+        const saveBtn = document.getElementById('saveBtn');
+        const testBtn = document.getElementById('testBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const linkCard = document.getElementById('linkCard');
+        
+        // 加载已保存的 Token
+        const savedToken = localStorage.getItem('github_token');
+        if (savedToken) {
+            tokenInput.value = savedToken;
+        }
+        
+        // 显示状态消息
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+        }
+        
+        // 保存配置
+        saveBtn.addEventListener('click', async () => {
+            const token = tokenInput.value.trim();
+            
+            if (!token) {
+                showStatus('请输入 GitHub Token', 'error');
+                return;
+            }
+            
+            GitHubStorage.setToken(token);
+            showStatus('配置保存成功！正在初始化数据...', 'loading');
+            
+            try {
+                // 初始化默认菜品
+                await GitHubStorage.initDefaultMenu();
+                showStatus('✅ 配置成功！数据已同步到 GitHub', 'success');
+                
+                // 显示链接
+                const baseUrl = `https://ttt222-del.github.io/-n/`;
+                document.getElementById('customerLink').href = baseUrl;
+                document.getElementById('customerLink').textContent = baseUrl;
+                document.getElementById('adminLink').href = baseUrl + 'admin.html';
+                document.getElementById('adminLink').textContent = baseUrl + 'admin.html';
+                document.getElementById('setupLink').href = baseUrl + 'setup.html';
+                document.getElementById('setupLink').textContent = baseUrl + 'setup.html';
+                linkCard.style.display = 'block';
+                
+            } catch (error) {
+                showStatus('❌ 保存失败：' + error.message, 'error');
+            }
+        });
+        
+        // 测试连接
+        testBtn.addEventListener('click', async () => {
+            const token = tokenInput.value.trim();
+            
+            if (!token) {
+                showStatus('请先输入 GitHub Token', 'error');
+                return;
+            }
+            
+            GitHubStorage.setToken(token);
+            showStatus('正在测试连接...', 'loading');
+            
+            try {
+                const data = await GitHubStorage.loadData();
+                showStatus('✅ 连接成功！已读取到 ' + (data.menu ? data.menu.length : 0) + ' 个菜品', 'success');
+            } catch (error) {
+                showStatus('❌ 连接失败：' + error.message, 'error');
+            }
+        });
+        
+        // 复制链接
+        function copyLink(elementId) {
+            const link = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                const btn = event.target;
+                btn.textContent = '已复制';
+                setTimeout(() => {
+                    btn.textContent = '复制';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

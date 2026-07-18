@@ -1,0 +1,86 @@
+{
+  "menu": [
+    {
+      "id": 1,
+      "name": "招牌炒饭",
+      "category": "staple",
+      "price": 28,
+      "description": "秘制酱料炒制",
+      "image": "🍚",
+      "hot": true,
+      "available": true
+    },
+    {
+      "id": 2,
+      "name": "红烧牛肉面",
+      "category": "staple",
+      "price": 32,
+      "description": "浓郁牛肉汤底",
+      "image": "🍜",
+      "hot": true,
+      "available": true
+    },
+    {
+      "id": 3,
+      "name": "宫保鸡丁",
+      "category": "meat",
+      "price": 38,
+      "description": "鸡肉嫩滑花生酥脆",
+      "image": "🍗",
+      "hot": true,
+      "available": true
+    },
+    {
+      "id": 4,
+      "name": "红烧肉",
+      "category": "meat",
+      "price": 48,
+      "description": "五花肉炖至软糯",
+      "image": "🥩",
+      "hot": true,
+      "available": true
+    },
+    {
+      "id": 5,
+      "name": "麻婆豆腐",
+      "category": "vegetable",
+      "price": 24,
+      "description": "麻辣鲜香",
+      "image": "🧊",
+      "hot": true,
+      "available": true
+    },
+    {
+      "id": 6,
+      "name": "番茄蛋花汤",
+      "category": "soup",
+      "price": 16,
+      "description": "酸甜开胃",
+      "image": "🍲",
+      "hot": false,
+      "available": true
+    },
+    {
+      "id": 7,
+      "name": "酸梅汤",
+      "category": "drink",
+      "price": 15,
+      "description": "消暑解腻",
+      "image": "🫐",
+      "hot": true,
+      "available": true
+    },
+    {
+      "id": 8,
+      "name": "芒果布丁",
+      "category": "dessert",
+      "price": 22,
+      "description": "香甜嫩滑",
+      "image": "🍮",
+      "hot": true,
+      "available": true
+    }
+  ],
+  "orders": [],
+  "lastUpdate": "2026-07-18T03:37:42.488Z"
+}
